@@ -37,6 +37,23 @@ class App extends Component {
         this.setState({showPersons: !doesShow})
     }
 
+    deletePersonsHandler = (personIndex) => {
+        // remember this creates a pointer named persons to the state.persons
+        // But this is bad practice. It is better to create a copy
+        // const persons = this.state.persons;
+
+        // ALWAYS change state in an immutable fashion, without mutating the original state.
+
+        // this creates a copy, slice with no arguments
+        // const persons = this.state.persons.slice();
+
+        // Or the spread operator also makes a copy, this is more modern
+        const persons = [...this.state.persons];
+
+        persons.splice(personIndex, 1);
+        this.setState({persons: persons});
+    }
+
 
     render() {
 
@@ -53,8 +70,10 @@ class App extends Component {
         if (this.state.showPersons) {
             persons = (
                 <div>
-                    {this.state.persons.map(person => {
+                    {this.state.persons.map((person, index) => {
                         return <Person
+                            // You could do this with the anonymous function like so, or with the bind method
+                            click={() => this.deletePersonsHandler(index)}
                             name={person.name}
                             age={person.age}/>
                     })}
