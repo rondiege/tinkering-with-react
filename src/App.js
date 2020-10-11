@@ -6,7 +6,8 @@ class App extends Component {
     state = {
         persons: [
             {name: 'Max', age: 8},
-            {name: 'Grant', age: 6}
+            {name: 'Grant', age: 6},
+            {name: 'Kenzie', age: 6}
         ],
         otherstate: 'some other value',
         showPersons: false
@@ -37,7 +38,6 @@ class App extends Component {
     }
 
 
-
     render() {
 
         const style = {
@@ -50,9 +50,14 @@ class App extends Component {
         }
         let persons = null;
 
-        if(this.state.showPersons){
+        if (this.state.showPersons) {
             persons = (
                 <div>
+                    {this.state.persons.map(person => {
+                        return <Person
+                            name={person.name}
+                            age={person.age}/>
+                    })}
                     <Person name="Jesse from the ifs!" click={() => this.switchNameHandler("grant")}/>
                 </div>
             );
@@ -64,14 +69,14 @@ class App extends Component {
                 so this is if showPersons ? the display them : else null  */}
                 {this.state.showPersons ?
                     <div>
-                    <Person name={this.state.persons[0].name} change={this.nameChangeHandler}/>
-                    {/*Anonymous functions like this are less efficient, better to us the bind methodology*/}
+                        <Person name={this.state.persons[0].name} change={this.nameChangeHandler}/>
+                        {/*Anonymous functions like this are less efficient, better to us the bind methodology*/}
 
-                    <Person name={this.state.persons[1].name}
-                            click={this.switchNameHandler.bind(this, "Lightning Thunder")}>I like geckos</Person>
-                    {/*passing function by reference so note no () on switchNameHandler. It would execute right away if we did that
+                        <Person name={this.state.persons[1].name}
+                                click={this.switchNameHandler.bind(this, "Lightning Thunder")}>I like geckos</Person>
+                        {/*passing function by reference so note no () on switchNameHandler. It would execute right away if we did that
                 Also note capitalized C in onClick, unlike usual*/}
-                </div> : null}
+                    </div> : null}
                 {/*This was contionally assigned with the let persons higher up*/}
                 {persons}
                 <button
