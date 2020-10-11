@@ -48,6 +48,15 @@ class App extends Component {
             padding: '8px',
             cursor: 'pointer'
         }
+        let persons = null;
+
+        if(this.state.showPersons){
+            persons = (
+                <div>
+                    <Person name="Jesse from the ifs!" click={() => this.switchNameHandler("grant")}/>
+                </div>
+            );
+        }
         return (
             <div className="App">
                 <h1>Hi! I am a react app!!</h1>
@@ -57,12 +66,14 @@ class App extends Component {
                     <div>
                     <Person name={this.state.persons[0].name} change={this.nameChangeHandler}/>
                     {/*Anonymous functions like this are less efficient, better to us the bind methodology*/}
-                    <Person name="Jesse" click={() => this.switchNameHandler("grant")}/>
+
                     <Person name={this.state.persons[1].name}
                             click={this.switchNameHandler.bind(this, "Lightning Thunder")}>I like geckos</Person>
                     {/*passing function by reference so note no () on switchNameHandler. It would execute right away if we did that
                 Also note capitalized C in onClick, unlike usual*/}
                 </div> : null}
+                {/*This was contionally assigned with the let persons higher up*/}
+                {persons}
                 <button
                     style={style}
                     // onClick={this.switchNameHandler.bind(this, 'Grant-eous')}
