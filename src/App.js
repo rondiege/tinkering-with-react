@@ -31,6 +31,24 @@ class App extends Component {
         })
     }
 
+    nameChangeHandlerNew = (event, id) => {
+        console.log("Here!")
+        // const person = this.state.persons.find();
+        const personIndex = this.state.persons.findIndex(p => {
+            return p.id === id;
+        });
+
+        // makeing a copy not altering the original
+        const person = {...this.state.persons[personIndex]};
+
+        person.name = event.target.value;
+
+        const persons = [...this.state.persons];
+        persons[personIndex] = person;
+
+        this.setState({persons: persons})
+    }
+
     togglePersonsHandler = () => {
         const doesShow = this.state.showPersons;
         // setState does not overwrite, just merges
@@ -74,11 +92,12 @@ class App extends Component {
                         return <Person
                             // You could do this with the anonymous function like so, or with the bind method
                             click={() => this.deletePersonsHandler(index)}
-                            name={person.name}
+                            name={person.name+ " NEW WAY"}
                             age={person.age}
                             // key is required/expected when generating lists, so react can render them more efficiently
                             // usually it is the id for the db row, but it can be anything unique
-                            key ={person.id}/>
+                            key={person.id}
+                            onChange={(event) => this.nameChangeHandlerNew(event, person.id)}/>
                     })}
                     <Person name="Jesse from the ifs!" click={() => this.switchNameHandler("grant")}/>
                 </div>
