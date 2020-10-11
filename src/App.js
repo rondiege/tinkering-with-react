@@ -5,9 +5,9 @@ import Person from './Person/Person';
 class App extends Component {
     state = {
         persons: [
-            {name: 'Max', age: 8},
-            {name: 'Grant', age: 6},
-            {name: 'Kenzie', age: 6}
+            {id: 1, name: 'Max', age: 8},
+            {id: 2, name: 'Grant', age: 6},
+            {id: 3, name: 'Kenzie', age: 6}
         ],
         otherstate: 'some other value',
         showPersons: false
@@ -75,7 +75,10 @@ class App extends Component {
                             // You could do this with the anonymous function like so, or with the bind method
                             click={() => this.deletePersonsHandler(index)}
                             name={person.name}
-                            age={person.age}/>
+                            age={person.age}
+                            // key is required/expected when generating lists, so react can render them more efficiently
+                            // usually it is the id for the db row, but it can be anything unique
+                            key ={person.id}/>
                     })}
                     <Person name="Jesse from the ifs!" click={() => this.switchNameHandler("grant")}/>
                 </div>
