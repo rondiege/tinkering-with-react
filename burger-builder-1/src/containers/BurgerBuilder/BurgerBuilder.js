@@ -1,9 +1,11 @@
 import React, {Component} from "react";
 import Burger from "../../components/Burger/burger";
-import BuildControls from "../../components/Burger/BuildControls/BuildControls"
-import Modal from "../../components/UI/Modal/modal"
-import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary"
-import Spinner from "../../components/UI/Spinner/Spinner"
+import BuildControls from "../../components/Burger/BuildControls/BuildControls";
+import Modal from "../../components/UI/Modal/modal";
+import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
+import Spinner from "../../components/UI/Spinner/Spinner";
+
+import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 
 import axios from "../../axios-orders";
 
@@ -104,7 +106,7 @@ class BurgerBuilder extends Component {
             this.setState({loading: false, purchasing: false});
             console.log(error)
         });
-        alert('Burger bought! (for now :D) Yum.');
+
     }
 
     render() {
@@ -144,4 +146,4 @@ class BurgerBuilder extends Component {
     }
 }
 
-export default BurgerBuilder;
+export default withErrorHandler(BurgerBuilder, axios);
