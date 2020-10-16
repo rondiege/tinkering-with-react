@@ -5,7 +5,7 @@ import Backdrop from '../Backdrop/Backdrop'
 // this could be a functional component doesn't have to be a class
 class Modal extends Component {
     shouldComponentUpdate(nextProps, nextState, nextContext) {
-        return nextProps.show !== this.props.show;
+        return nextProps.show !== this.props.show || nextProps.children !== this.props.children;
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
