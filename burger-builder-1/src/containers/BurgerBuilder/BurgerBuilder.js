@@ -18,18 +18,35 @@ const INGREDIENT_PRICE = {
 
 class BurgerBuilder extends Component {
 
+    constructor(props) {
+        super(props);
+        axios.get('/ingredients.json').then(response => {
+            console.log(response.data);
+            // const ingredients = Object.keys(response.data).map(key => ({key : 0} ));
+            this.setState({ingredients: response.data, error: false});
+            // alert("I did it!");
+        }).catch(this.setState({error: true}));
+    }
+
     state = {
-        ingredients: {
-            salad: 0,
-            bacon: 0,
-            cheese: 0,
-            meat: 0
-        },
+        ingredients: null,
         totalPrice: 4,
         purchasable: false,
         purchasing: false,
-        loading: false
+        loading: false,
+        error: false
     }
+
+    //Best time to fetch data is during this function call... jk... the constructor is the right spot.
+    // componentDidMount() {
+    //     axios.get('/ingredients.json').then(response => {
+    //         console.log(response.data);
+    //         // const ingredients = Object.keys(response.data).map(key => ({key : 0} ));
+    //         this.setState({ingredients: response.data});
+    //         // alert("I did it!");
+    //     })
+    //
+    // }
 
     // We are taking the ingredients as a parameter as the state might not be up to date yet
     updatePurchase(ingredients) {
@@ -118,21 +135,14 @@ class BurgerBuilder extends Component {
             disabledInfo[key] = disabledInfo[key] <= 0;
         }
 
-        let orderSummary = <OrderSummary cancelOrderAct={this.purchaseCancelHandler}
-                                         price={this.state.totalPrice}
-                                         continueOrderAct={this.purchaseContinueHandler}
-                                         ingredients={this.state.ingredients}/>
+        let orderSummary = null;
 
-        if (this.state.loading) {
-            orderSummary = <Spinner/>
-        }
+        let burger = this.state.error ? <p>Ingredients cannot be loaded</p> : <Spinner/>;
 
-        return (
-            <React.Fragment>
-                <Modal show={this.state.purchasing} modalClosed={this.purchaseCancelHandler}>
-                    {orderSummary}
-                </Modal>
-                <Burger ingredients={this.state.ingredients}/>
+        // This is needed because ingredients start null because they are asynchronously
+        // fetched from the db. So ingredients start out null
+        if (this.state.ingredients) {
+            burger = (<><Burger ingredients={this.state.ingredients}/>
                 <BuildControls
                     ordered={this.purchaseHandler}
                     purchasable={this.state.purchasable}
@@ -141,6 +151,24 @@ class BurgerBuilder extends Component {
                     ingredientRemoved={this.removeIngredientHandler}
                     disabled={disabledInfo}
                 />
+            </>);
+
+            orderSummary = <OrderSummary cancelOrderAct={this.purchaseCancelHandler}
+                                         price={this.state.totalPrice}
+                                         continueOrderAct={this.purchaseContinueHandler}
+                                         ingredients={this.state.ingredients}/>
+        }
+
+        if (this.state.loading) {
+            orderSummary = <Spinner/>;
+        }
+
+        return (
+            <React.Fragment>
+                <Modal show={this.state.purchasing} modalClosed={this.purchaseCancelHandler}>
+                    {orderSummary}
+                </Modal>
+                {burger}
             </React.Fragment>
         );
     }
